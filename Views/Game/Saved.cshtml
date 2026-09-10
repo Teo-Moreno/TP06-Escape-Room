@@ -1,0 +1,42 @@
+@{
+ViewData["Title"] = "Guardados";
+}
+
+
+<div class="saved-container">
+
+    <h1>PARTIDAS GUARDADAS</h1>
+
+    <div class="save-slots">
+
+        @foreach (int i = 1; i <= 3; i++)
+        {
+            if (){
+                <div class="save-slot">
+                    <h2>PARTIDA @i</h2>
+
+                    <p>Guardada en la sala @i</p>
+
+                    <a href="@Url.Action("Cargar", "Game", new { id = i })">
+                        CARGAR PARTIDA
+                    </a>
+                </div>
+            }
+            else{
+                <div class="save-slot">
+                    <h2>PARTIDA @i</h2>
+
+                    <p>Vacía</p>
+
+                    <a href="@Url.Action(" Sala1", "Game" )">
+                        NUEVA PARTIDA
+                    </a>
+                </div>
+            }
+
+        }
+
+
+    </div>
+
+</div>
