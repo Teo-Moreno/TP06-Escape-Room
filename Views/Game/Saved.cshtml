@@ -9,9 +9,9 @@ ViewData["Title"] = "Guardados";
 
     <div class="save-slots">
 
-        @foreach (int i = 1; i <= 3; i++)
+        @for (int i = 1; i <= 3; i++)
         {
-            if (){
+            if (@ViewBag.SaveSlots[i-1] != null){
                 <div class="save-slot">
                     <h2>PARTIDA @i</h2>
 

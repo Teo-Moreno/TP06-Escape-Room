@@ -6,4 +6,4 @@ namespace EscapeRoom.Models
         public int IdPartida { get; set; }
         public int Numero { get; set; }
     }
-}
+}   
