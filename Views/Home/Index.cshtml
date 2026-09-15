@@ -2,40 +2,21 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="home">
+<div class="home-container">
 
-    <section class="hero">
-        <div class="overlay"></div>
+    <div class="home-title">
+        <h1>THE ASYLUM</h1>
+        <h2>BLACKWOOD PSYCHIATRIC HOSPITAL</h2>
+    </div>
 
-        <div class="hero-content">
-            <p class="subtitle">BLACKWOOD PSYCHIATRIC HOSPITAL</p>
+    <div class="home-intro">
+        <p>17/04/2013 — Marylin Crose desapareció.</p>
+        <p>13 años después, Jon Hermendoff vuelve al hospital.</p>
+    </div>
 
-            <h1>THE ASYLUM</h1>
-
-            <p class="description">
-                Un hospital abandonado.<br>
-                Una mujer desaparecida.<br>
-                Y una verdad que nunca debió ser recordada.
-            </p>
-
-            <a class="start-btn" href="@Url.Action("NewGame", "Game")">
-                COMENZAR
-            </a>
-        </div>
-    </section>
-
-    <section class="intro">
-        <h2>13 años después...</h2>
-
-        <p>
-            Jon Hermendoff regresa al antiguo Blackwood Psychiatric Hospital
-            buscando respuestas sobre la desaparición de su esposa.
-        </p>
-
-        <p>
-            Pero algunas cosas que fueron olvidadas
-            prefieren permanecer así.
-        </p>
-    </section>
+    <div class="home-menu">
+        <a class="home-btn" href="@Url.Action("Saved", "Game")">COMENZAR</a>
+        <a class="home-btn" href="@Url.Action("Credits", "Home")">CRÉDITOS</a>
+    </div>
 
 </div>
