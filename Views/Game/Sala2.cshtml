@@ -1,0 +1,56 @@
+@{
+    ViewBag.Title = "Sala 2";
+}
+
+<div class="game-room" id="gameRoom" data-room="2">
+
+    <img class="room-background"
+         src="~/images/salas/sala2.png"
+         alt="Recepción abandonada">
+
+    <button class="game-button"
+            onclick="room2Archivo(1)"
+            style="left: 25%; top: 42%;">
+        Archivo
+    </button>
+
+    <button class="game-button"
+            onclick="room2Archivo(2)"
+            style="left: 34%; top: 48%;">
+        Archivo
+    </button>
+
+    <button class="game-button"
+            onclick="room2Archivo(3)"
+            style="left: 43%; top: 55%;">
+        Archivo
+    </button>
+
+    <button class="game-button"
+            onclick="room2Marylin()"
+            style="left: 58%; top: 75%;">
+        Expediente
+    </button>
+
+    <button class="game-button"
+            onclick="room2Cadaver()"
+            style="left: 87%; top: 75%;">
+        Examinar
+    </button>
+
+    <button class="game-button"
+            onclick="room2Puerta()"
+            style="left: 52%; top: 30%;">
+        Puerta
+    </button>
+
+</div>
+
+<div id="gameModal" class="game-modal hidden">
+    <div class="game-modal-content">
+        <button class="close-modal" onclick="cerrarModal()">X</button>
+        <div id="modalContent"></div>
+    </div>
+</div>
+
+<div id="notification" class="game-notification"></div>

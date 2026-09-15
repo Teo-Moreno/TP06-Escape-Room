@@ -1,0 +1,46 @@
+@{
+    ViewBag.Title = "Sala 7";
+}
+
+<div class="game-room" id="gameRoom" data-room="7">
+
+    <img class="room-background"
+         id="room7Background"
+         src="~/images/salas/sala7.png"
+         alt="Sala final">
+
+    <button class="game-button"
+            id="btnMirarAtras"
+            onclick="room7MirarAtras()"
+            style="left: 50%; top: 70%;">
+        Mirar atrás
+    </button>
+
+    <button class="game-button"
+            id="btnPuertaFinal"
+            onclick="room7Puerta()"
+            style="left: 50%; top: 35%;">
+        Puerta
+    </button>
+
+    <button class="game-button"
+            id="btnNotaFinal"
+            onclick="room7Nota()"
+            style="left: 54%; top: 42%;">
+        Nota
+    </button>
+
+    <div id="finalTimer" class="final-timer hidden">
+        30
+    </div>
+
+</div>
+
+<div id="gameModal" class="game-modal hidden">
+    <div class="game-modal-content">
+        <button class="close-modal" onclick="cerrarModal()">X</button>
+        <div id="modalContent"></div>
+    </div>
+</div>
+
+<div id="notification" class="game-notification"></div>
