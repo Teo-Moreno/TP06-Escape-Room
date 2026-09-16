@@ -1,0 +1,30 @@
+@{
+    ViewData["Title"] = "Iniciar sesión";
+}
+
+<div class="login-container">
+
+    <h1>INICIAR SESIÓN</h1>
+
+    <form asp-action="Login" asp-controller="Home" method="post">
+
+        <div class="login-field">
+            <label for="Nombre">Nombre</label>
+            <input type="text" id="Nombre" name="Nombre" required />
+        </div>
+
+        <div class="login-field">
+            <label for="Contrasena">Contraseña</label>
+            <input type="password" id="Contrasena" name="Contrasena" required />
+        </div>
+
+        @if (ViewBag.Error != null)
+        {
+            <p class="login-error">@ViewBag.Error</p>
+        }
+
+        <button type="submit">INGRESAR</button>
+
+    </form>
+
+</div>
