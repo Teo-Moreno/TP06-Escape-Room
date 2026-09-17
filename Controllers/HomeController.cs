@@ -88,6 +88,14 @@ public class HomeController : Controller
 
         return RedirectToAction("Login");
     }
+    
+    [HttpGet]
+    public IActionResult Logout()
+    {
+        HttpContext.Session.Clear();
+
+        return RedirectToAction("Login");
+    }
 
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

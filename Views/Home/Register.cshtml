@@ -1,0 +1,51 @@
+@{
+    ViewData["Title"] = "Crear cuenta";
+}
+
+<div class="auth-container">
+
+    <div class="auth-box">
+
+        <h1>THE ASYLUM</h1>
+        <h2>CREAR CUENTA</h2>
+
+        <form asp-controller="Login" asp-action="Register" method="post">
+
+            <div class="auth-field">
+                <label asp-for="Nombre">Nombre</label>
+                <input asp-for="Nombre" />
+                <span asp-validation-for="Nombre"></span>
+            </div>
+
+            <div class="auth-field">
+                <label asp-for="Usuario">Usuario</label>
+                <input asp-for="Usuario" />
+                <span asp-validation-for="Usuario"></span>
+            </div>
+
+            <div class="auth-field">
+                <label asp-for="Password">Contraseña</label>
+                <input asp-for="Password" />
+                <span asp-validation-for="Password"></span>
+            </div>
+
+            <div class="auth-field">
+                <label asp-for="ConfirmarPassword">Repetir contraseña</label>
+                <input asp-for="ConfirmarPassword" />
+                <span asp-validation-for="ConfirmarPassword"></span>
+            </div>
+
+            <button type="submit" class="auth-btn">
+                CREAR CUENTA
+            </button>
+
+        </form>
+
+        <a class="auth-link"
+           href="@Url.Action("Index", "Login")">
+            YA TENGO UNA CUENTA
+        </a>
+
+    </div>
+
+</div>
