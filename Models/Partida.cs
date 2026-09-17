@@ -1,6 +1,6 @@
 using System;
 
-namespace EscapeRoom.Models
+namespace Tp06.Models
 {
     public class Partida
     {
@@ -10,5 +10,6 @@ namespace EscapeRoom.Models
         public DateTime FechaInicio { get; set; }
         public DateTime FechaFin { get; set; }
         public string NumeroPartida { get; set; }
+        public string Estado { get; set; }
     }
 }

@@ -9,30 +9,26 @@
         <h1>THE ASYLUM</h1>
         <h2>CREAR CUENTA</h2>
 
-        <form asp-controller="Login" asp-action="Register" method="post">
+        <form action="@Url.Action("Register", "Login")" method="post">
 
             <div class="auth-field">
-                <label asp-for="Nombre">Nombre</label>
-                <input asp-for="Nombre" />
-                <span asp-validation-for="Nombre"></span>
+                <label for="Nombre">Nombre</label>
+                <input type="text" id="Nombre" name="Nombre" />
             </div>
 
             <div class="auth-field">
-                <label asp-for="Usuario">Usuario</label>
-                <input asp-for="Usuario" />
-                <span asp-validation-for="Usuario"></span>
+                <label for="Usuario">Usuario</label>
+                <input type="text" id="Usuario" name="Usuario" />
             </div>
 
             <div class="auth-field">
-                <label asp-for="Password">Contraseña</label>
-                <input asp-for="Password" />
-                <span asp-validation-for="Password"></span>
+                <label for="Password">Contraseña</label>
+                <input type="password" id="Password" name="Password" />
             </div>
 
             <div class="auth-field">
-                <label asp-for="ConfirmarPassword">Repetir contraseña</label>
-                <input asp-for="ConfirmarPassword" />
-                <span asp-validation-for="ConfirmarPassword"></span>
+                <label for="ConfirmarPassword">Repetir contraseña</label>
+                <input type="password" id="ConfirmarPassword" name="ConfirmarPassword" />
             </div>
 
             <button type="submit" class="auth-btn">

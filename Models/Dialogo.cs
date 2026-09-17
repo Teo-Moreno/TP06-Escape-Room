@@ -1,4 +1,4 @@
-namespace EscapeRoom.Models
+namespace Tp06.Models
 {
     public class Dialogo
     {

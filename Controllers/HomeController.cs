@@ -30,13 +30,13 @@ public class HomeController : Controller
     }
 
     [HttpPost]
-    public IActionResult Login(string usuario, string password)
+    public IActionResult Login(string jugador, string password)
     {
-        Usuario? user = DB.BuscarUsuario(usuario, password);
+        Jugador? user = DB.BuscarJugador(jugador, password);
 
         if (user == null)
         {
-            ViewBag.Error = "Usuario o contraseña incorrectos.";
+            ViewBag.Error = "Jugador o contraseña incorrectos.";
             return View();
         }
 
@@ -56,8 +56,8 @@ public class HomeController : Controller
     public IActionResult Register(
         string nombre,
         string apellido,
-        string usuario,
-        string tipoUsuario,
+        string jugador,
+        string tipoJugador,
         string password,
         string password2)
     {
@@ -67,28 +67,25 @@ public class HomeController : Controller
             return View();
         }
 
-        Usuario? usuarioExistente = DB.BuscarUsuarioPorUsername(usuario);
+        Jugador? jugadorExistente = DB.BuscarJugadorPorUsername(jugador);
 
-        if (usuarioExistente != null)
+        if (jugadorExistente != null)
         {
-            ViewBag.Error = "El nombre de usuario ya está registrado.";
+            ViewBag.Error = "El nombre de jugador ya está registrado.";
             return View();
         }
 
-        Usuario nuevoUsuario = new Usuario
+        Jugador nuevoJugador = new Jugador
         {
-            Username = usuario,
             Password = password,
-            Nombre = nombre,
-            Apellido = apellido,
-            TipoUsuario = tipoUsuario
+            Nombre = nombre
         };
 
-        DB.RegistrarUsuario(nuevoUsuario);
+        DB.RegistrarJugador(nuevoJugador);
 
         return RedirectToAction("Login");
     }
-    
+
     [HttpGet]
     public IActionResult Logout()
     {

@@ -1,4 +1,4 @@
-namespace Tp05.Models;
+namespace Tp06.Models;
 
 using Microsoft.Data.SqlClient;
 using Dapper;

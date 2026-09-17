@@ -16,7 +16,7 @@ public class GameController : Controller
     {
         int idJugador = ObtenerJugadorLogueado();
 
-        List<Partida> partidas = bd.buscarGuardados(idJugador);
+        List<Partida> partidas = DB.buscarGuardados(idJugador);
 
         ViewBag.SaveSlots = partidas;
 
@@ -74,7 +74,7 @@ public class GameController : Controller
 
     public IActionResult Inventory(int idPartida)
     {
-        List<Objeto> objetos = bd.buscarInventario(idPartida);
+        List<Objeto> objetos = DB.buscarInventario(idPartida);
 
         ViewBag.Objetos = objetos;
         ViewBag.IdPartida = idPartida;
@@ -85,7 +85,7 @@ public class GameController : Controller
     {
         int idJugador = ObtenerJugadorLogueado();
 
-        Partida partida = bd.buscarPartida(id, idJugador);
+        Partida partida = DB.buscarPartida(id, idJugador);
 
         if (partida == null)
         {
@@ -102,21 +102,21 @@ public class GameController : Controller
             return RedirectToAction("Saved");
         }
 
-        return IrASala(partida.IdSalaActual, partida.IdPartida);
+        return IrASala(partida.IdSalaActual, partida.Id);
     }
 
     public IActionResult NuevaPartida(int numeroPartida)
     {
         int idJugador = ObtenerJugadorLogueado();
 
-        bool existePartida = bd.existePartida(idJugador, numeroPartida);
+        bool existePartida = DB.existePartida(idJugador, numeroPartida);
 
         if (existePartida)
         {
             return RedirectToAction("Saved");
         }
 
-        Partida partida = bd.crearPartida(
+        Partida partida = DB.crearPartida(
             idJugador,
             numeroPartida,
             1
@@ -124,7 +124,7 @@ public class GameController : Controller
 
         return RedirectToAction(
             "Sala1",
-            new { idPartida = partida.IdPartida }
+            new { idPartida = partida.Id }
         );
     }
 
@@ -133,7 +133,7 @@ public class GameController : Controller
     {
         int idJugador = ObtenerJugadorLogueado();
 
-        bool perteneceAlJugador = bd.partidaPerteneceAJugador(
+        bool perteneceAlJugador = DB.partidaPerteneceAJugador(
             idPartida,
             idJugador
         );
@@ -143,7 +143,7 @@ public class GameController : Controller
             return RedirectToAction("Saved");
         }
 
-        bd.guardarPartida(
+        DB.guardarPartida(
             idPartida,
             idSala
         );
@@ -159,7 +159,7 @@ public class GameController : Controller
     {
         int idJugador = ObtenerJugadorLogueado();
 
-        bool perteneceAlJugador = bd.partidaPerteneceAJugador(
+        bool perteneceAlJugador = DB.partidaPerteneceAJugador(
             idPartida,
             idJugador
         );
@@ -169,7 +169,7 @@ public class GameController : Controller
             return BadRequest();
         }
 
-        bd.guardarProgreso(
+        DB.guardarProgreso(
             idPartida,
             clave,
             valor
@@ -185,7 +185,7 @@ public class GameController : Controller
     {
         int idJugador = ObtenerJugadorLogueado();
 
-        bool perteneceAlJugador = bd.partidaPerteneceAJugador(
+        bool perteneceAlJugador = DB.partidaPerteneceAJugador(
             idPartida,
             idJugador
         );
@@ -195,7 +195,7 @@ public class GameController : Controller
             return BadRequest();
         }
 
-        string valor = bd.buscarProgreso(
+        string valor = DB.buscarProgreso(
             idPartida,
             clave
         );
@@ -210,7 +210,7 @@ public class GameController : Controller
     {
         int idJugador = ObtenerJugadorLogueado();
 
-        bool perteneceAlJugador = bd.partidaPerteneceAJugador(
+        bool perteneceAlJugador = DB.partidaPerteneceAJugador(
             idPartida,
             idJugador
         );
@@ -220,7 +220,7 @@ public class GameController : Controller
             return BadRequest();
         }
 
-        bd.agregarObjetoInventario(
+        DB.agregarObjetoInventario(
             idPartida,
             idObjeto
         );
@@ -235,7 +235,7 @@ public class GameController : Controller
     {
         int idJugador = ObtenerJugadorLogueado();
 
-        bool perteneceAlJugador = bd.partidaPerteneceAJugador(
+        bool perteneceAlJugador = DB.partidaPerteneceAJugador(
             idPartida,
             idJugador
         );
@@ -245,7 +245,7 @@ public class GameController : Controller
             return BadRequest();
         }
 
-        bool tieneObjeto = bd.tieneObjeto(
+        bool tieneObjeto = DB.tieneObjeto(
             idPartida,
             idObjeto
         );
@@ -255,7 +255,7 @@ public class GameController : Controller
             return BadRequest();
         }
 
-        bd.usarObjeto(
+        DB.usarObjeto(
             idPartida,
             idObjeto
         );
@@ -268,7 +268,7 @@ public class GameController : Controller
     {
         int idJugador = ObtenerJugadorLogueado();
 
-        bool perteneceAlJugador = bd.partidaPerteneceAJugador(
+        bool perteneceAlJugador = DB.partidaPerteneceAJugador(
             idPartida,
             idJugador
         );
@@ -278,7 +278,7 @@ public class GameController : Controller
             return RedirectToAction("Saved");
         }
 
-        bd.completarPartida(idPartida);
+        DB.completarPartida(idPartida);
 
         return RedirectToAction("Sala7", new { idPartida = idPartida });
     }
@@ -287,7 +287,7 @@ public class GameController : Controller
     {
         int idJugador = ObtenerJugadorLogueado();
 
-        bool perteneceAlJugador = bd.partidaPerteneceAJugador(
+        bool perteneceAlJugador = DB.partidaPerteneceAJugador(
             idPartida,
             idJugador
         );
@@ -297,7 +297,7 @@ public class GameController : Controller
             return RedirectToAction("Saved");
         }
 
-        bd.perderPartida(idPartida);
+        DB.perderPartida(idPartida);
 
         return RedirectToAction("Saved");
     }
@@ -315,7 +315,7 @@ public class GameController : Controller
     {
         int idJugador = ObtenerJugadorLogueado();
 
-        bool perteneceAlJugador = bd.partidaPerteneceAJugador(
+        bool perteneceAlJugador = DB.partidaPerteneceAJugador(
             idPartida,
             idJugador
         );
@@ -325,14 +325,14 @@ public class GameController : Controller
             return;
         }
 
-        Partida partida = bd.buscarPartida(
+        Partida partida = DB.buscarPartida(
             idPartida,
             idJugador
         );
 
-        Sala sala = bd.buscarSala(numeroSala);
+        Sala sala = DB.buscarSala(numeroSala);
 
-        List<Objeto> objetos = bd.buscarInventario(idPartida);
+        List<Objeto> objetos = DB.buscarInventario(idPartida);
 
         ViewBag.Partida = partida;
         ViewBag.Sala = sala;
@@ -344,52 +344,12 @@ public class GameController : Controller
         int idSala,
         int idPartida)
     {
-        switch (idSala)
-        {
-            case 1:
-                return RedirectToAction(
-                    "Sala1",
+        if (idSala <= 7){
+            return RedirectToAction(
+                    "Sala" + idSala.ToString(),
                     new { idPartida = idPartida }
                 );
-
-            case 2:
-                return RedirectToAction(
-                    "Sala2",
-                    new { idPartida = idPartida }
-                );
-
-            case 3:
-                return RedirectToAction(
-                    "Sala3",
-                    new { idPartida = idPartida }
-                );
-
-            case 4:
-                return RedirectToAction(
-                    "Sala4",
-                    new { idPartida = idPartida }
-                );
-
-            case 5:
-                return RedirectToAction(
-                    "Sala5",
-                    new { idPartida = idPartida }
-                );
-
-            case 6:
-                return RedirectToAction(
-                    "Sala6",
-                    new { idPartida = idPartida }
-                );
-
-            case 7:
-                return RedirectToAction(
-                    "Sala7",
-                    new { idPartida = idPartida }
-                );
-
-            default:
-                return RedirectToAction("Saved");
         }
+        return RedirectToAction("Saved");
     }
 }
