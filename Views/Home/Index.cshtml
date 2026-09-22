@@ -9,20 +9,42 @@
         <h2>BLACKWOOD PSYCHIATRIC HOSPITAL</h2>
     </div>
 
-    <div class="home-intro">
-        <p>17/04/2013 — Marylin Crose desapareció.</p>
-        <p>13 años después, Jon Hermendoff vuelve al hospital.</p>
-    </div>
+    <div class="home-content">
 
-    <div class="home-menu">
-        <a class="home-btn" href="@Url.Action("Login", "Home")">COMENZAR</a>
-        <a class="home-btn" href="@Url.Action("Register", "Home")">REGISTRARSE</a>
-        <a class="home-btn" href="@Url.Action("Logout", "Home")">CERRAR SESION</a>
-        <a class="home-btn" href="@Url.Action("Credits", "Home")">CRÉDITOS</a>
-    </div>
+        <div class="home-image">
+            <img src="../../wwwroot/images/asylum.png"
+                 alt="Blackwood Psychiatric Hospital">
+        </div>
 
-    <div class="home-image">
-        <img src="../../wwwroot/images/asylum.png" alt="Blackwood Psychiatric Hospital">
+        <div class="home-intro">
+            <p>17/04/2013 — Marylin Crose desapareció.</p>
+            <p>13 años después, Jon Hermendoff vuelve al hospital.</p>
+        </div>
+
+        <div class="home-menu">
+
+            <a class="home-card" href="@Url.Action("Login", "Home")">
+                <span>COMENZAR</span>
+                <small>Continuar hacia el hospital</small>
+            </a>
+
+            <a class="home-card" href="@Url.Action("Register", "Home")">
+                <span>REGISTRARSE</span>
+                <small>Crear una nueva cuenta</small>
+            </a>
+
+            <a class="home-card" href="@Url.Action("Logout", "Home")">
+                <span>CERRAR SESIÓN</span>
+                <small>Salir de la sesión actual</small>
+            </a>
+
+            <a class="home-card" href="@Url.Action("Credits", "Home")">
+                <span>CRÉDITOS</span>
+                <small>Información del proyecto</small>
+            </a>
+
+        </div>
+
     </div>
 
 </div>

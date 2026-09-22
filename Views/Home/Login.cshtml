@@ -9,13 +9,13 @@
     <form action="@Url.Action("Login", "Home")" method="post">
 
         <div class="login-field">
-            <label for="Nombre">Nombre</label>
-            <input type="text" id="Nombre" name="Nombre" required />
+            <label for="jugador">Nombre</label>
+            <input type="text" id="jugador" name="jugador" required />
         </div>
 
         <div class="login-field">
             <label for="Contrasena">Contraseña</label>
-            <input type="password" id="Contrasena" name="Contrasena" required />
+            <input type="password" id="Contrasena" name="password" required />
         </div>
 
         @ViewBag.Error
