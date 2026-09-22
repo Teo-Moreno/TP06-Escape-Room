@@ -9,26 +9,21 @@
         <h1>THE ASYLUM</h1>
         <h2>CREAR CUENTA</h2>
 
-        <form action="@Url.Action("Register", "Login")" method="post">
+        <form action="@Url.Action("Register", "Home")" method="post">
 
             <div class="auth-field">
                 <label for="Nombre">Nombre</label>
-                <input type="text" id="Nombre" name="Nombre" />
-            </div>
-
-            <div class="auth-field">
-                <label for="Usuario">Usuario</label>
-                <input type="text" id="Usuario" name="Usuario" />
+                <input type="text" id="Nombre" name="nombre" />
             </div>
 
             <div class="auth-field">
                 <label for="Password">Contraseña</label>
-                <input type="password" id="Password" name="Password" />
+                <input type="password" id="Password" name="password" />
             </div>
 
             <div class="auth-field">
                 <label for="ConfirmarPassword">Repetir contraseña</label>
-                <input type="password" id="ConfirmarPassword" name="ConfirmarPassword" />
+                <input type="password" id="ConfirmarPassword" name="password2" />
             </div>
 
             <button type="submit" class="auth-btn">
@@ -37,8 +32,10 @@
 
         </form>
 
+        @ViewBag.Error
+
         <a class="auth-link"
-           href="@Url.Action("Index", "Login")">
+           href="@Url.Action("Index", "Home")">
             YA TENGO UNA CUENTA
         </a>
 

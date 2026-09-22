@@ -6,7 +6,7 @@
 
     <h1>INICIAR SESIÓN</h1>
 
-    <form asp-action="Login" asp-controller="Home" method="post">
+    <form action="@Url.Action("Login", "Home")" method="post">
 
         <div class="login-field">
             <label for="Nombre">Nombre</label>
@@ -18,13 +18,13 @@
             <input type="password" id="Contrasena" name="Contrasena" required />
         </div>
 
-        @if (ViewBag.Error != null)
-        {
-            <p class="login-error">@ViewBag.Error</p>
-        }
+        @ViewBag.Error
 
         <button type="submit">INGRESAR</button>
 
     </form>
+
+    <a class="home-btn" href="@Url.Action("Register", "Home")">¿No tenes Cuenta? REGISTRARSE</a>
+
 
 </div>

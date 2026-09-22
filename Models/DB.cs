@@ -6,7 +6,76 @@ using Dapper;
 public static class DB
 {
     private static string _connectionString =
-        @"Server=localhost;Database=LogIn2026SQL;User Id=alumno;Password=alumno;TrustServerCertificate=True;";
+        @"Server=localhost;Database=Escape Room;User Id=alumno;Password=alumno;TrustServerCertificate=True;";
+
+
+    public static Jugador? BuscarJugadorPorNombre(string jugador)
+    {
+        using (SqlConnection connection = new SqlConnection(_connectionString))
+        {
+            string sql = @"
+                SELECT *
+                FROM Jugador
+                WHERE Nombre = @Nombre";
+
+            return connection.QueryFirstOrDefault<Jugador>(
+                sql,
+                new
+                {
+                    Nombre = jugador
+                }
+            );
+        }
+    }
+
+    public static void RegistrarJugador(Jugador jugador)
+    {
+        using (SqlConnection connection = new SqlConnection(_connectionString))
+        {
+            string sql = @"
+                INSERT INTO Jugador
+                (
+                    Nombre,
+                    Password
+                )
+                VALUES
+                (
+                    @Nombre,
+                    @Password
+                )";
+
+            connection.Execute(
+                sql,
+                new
+                {
+                    Nombre = jugador.Nombre,
+                    Password = jugador.Password
+                }
+            );
+        }
+    }
+
+    
+    public static Jugador? BuscarJugador(string jugador, string password)
+    {
+        using (SqlConnection connection = new SqlConnection(_connectionString))
+        {
+            string sql = @"
+                SELECT *
+                FROM Jugador
+                WHERE Nombre = @Nombre
+                AND Password = @Password";
+
+            return connection.QueryFirstOrDefault<Jugador>(
+                sql,
+                new
+                {
+                    Nombre = jugador,
+                    Password = password
+                }
+            );
+        }
+    }
         
     public static Jugador? BuscarUsuario(string Nombre, string password)
     {

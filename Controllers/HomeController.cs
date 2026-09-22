@@ -26,6 +26,13 @@ public class HomeController : Controller
     [HttpGet]
     public IActionResult Login()
     {
+        int? idJugador = HttpContext.Session.GetInt32("IdJugador");
+
+        if (idJugador != null)
+        {
+            return RedirectToAction("Saved", "Game");
+        }
+
         return View();
     }
 
@@ -40,11 +47,21 @@ public class HomeController : Controller
             return View();
         }
 
-        HttpContext.Session.SetString("Username", user.Username);
+        HttpContext.Session.SetInt32(
+            "IdJugador",
+            user.Id
+        );
 
-        return RedirectToAction("Bienvenida");
+        HttpContext.Session.SetString(
+            "Nombre",
+            user.Nombre
+        );
+
+        return RedirectToAction(
+            "Saved",
+            "Game"
+        );
     }
-
 
     [HttpGet]
     public IActionResult Register()
@@ -55,35 +72,38 @@ public class HomeController : Controller
     [HttpPost]
     public IActionResult Register(
         string nombre,
-        string apellido,
-        string jugador,
-        string tipoJugador,
         string password,
         string password2)
     {
         if (password != password2)
         {
-            ViewBag.Error = "Las contraseñas no coinciden.";
+            ViewBag.Error =
+                "Las contraseñas no coinciden.";
+
             return View();
         }
 
-        Jugador? jugadorExistente = DB.BuscarJugadorPorUsername(jugador);
+        Jugador? jugadorExistente =
+            DB.BuscarJugadorPorNombre(nombre);
+
 
         if (jugadorExistente != null)
         {
-            ViewBag.Error = "El nombre de jugador ya está registrado.";
+            ViewBag.Error =
+                "El nombre de jugador ya está registrado.";
+
             return View();
         }
 
         Jugador nuevoJugador = new Jugador
         {
-            Password = password,
-            Nombre = nombre
+            Nombre = nombre,
+            Password = password
         };
 
         DB.RegistrarJugador(nuevoJugador);
 
-        return RedirectToAction("Login");
+        return RedirectToAction("Login", "Home");
     }
 
     [HttpGet]
@@ -91,13 +111,23 @@ public class HomeController : Controller
     {
         HttpContext.Session.Clear();
 
-        return RedirectToAction("Login");
+        return RedirectToAction("Index");
     }
 
-
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+    [ResponseCache(
+        Duration = 0,
+        Location = ResponseCacheLocation.None,
+        NoStore = true
+    )]
     public IActionResult Error()
     {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        return View(
+            new ErrorViewModel
+            {
+                RequestId =
+                    Activity.Current?.Id
+                    ?? HttpContext.TraceIdentifier
+            }
+        );
     }
 }
