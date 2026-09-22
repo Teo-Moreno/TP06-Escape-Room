@@ -63,7 +63,6 @@ public static class DB
     }
 
     // BUSCAR GUARDADOS
-    // =========================================
 
     public static List<Partida> buscarGuardados(int idJugador)
     {
@@ -86,9 +85,7 @@ public static class DB
     }
 
 
-    // =========================================
     // BUSCAR PARTIDA
-    // =========================================
 
     public static Partida? buscarPartida(int id, int idJugador)
     {
@@ -112,9 +109,7 @@ public static class DB
     }
 
 
-    // =========================================
     // EXISTE PARTIDA
-    // =========================================
 
     public static bool existePartida(
         int idJugador,
@@ -142,9 +137,7 @@ public static class DB
     }
 
 
-    // =========================================
     // CREAR PARTIDA
-    // =========================================
 
     public static Partida crearPartida(
         int idJugador,
@@ -185,9 +178,7 @@ public static class DB
     }
 
 
-    // =========================================
     // GUARDAR PARTIDA
-    // =========================================
 
     public static void guardarPartida(
         int idPartida,
@@ -212,9 +203,7 @@ public static class DB
     }
 
 
-    // =========================================
     // PARTIDA PERTENECE AL JUGADOR
-    // =========================================
 
     public static bool partidaPerteneceAJugador(
         int idPartida,
@@ -242,9 +231,7 @@ public static class DB
     }
 
 
-    // =========================================
     // GUARDAR PROGRESO
-    // =========================================
 
     public static void guardarProgreso(
         int idPartida,
@@ -296,9 +283,7 @@ public static class DB
     }
 
 
-    // =========================================
     // BUSCAR PROGRESO
-    // =========================================
 
     public static string? buscarProgreso(
         int idPartida,
@@ -324,9 +309,7 @@ public static class DB
     }
 
 
-    // =========================================
     // AGREGAR OBJETO AL INVENTARIO
-    // =========================================
 
     public static void agregarObjetoInventario(
         int idPartida,
@@ -358,9 +341,7 @@ public static class DB
     }
 
 
-    // =========================================
     // TIENE OBJETO
-    // =========================================
 
     public static bool tieneObjeto(
         int idPartida,
@@ -388,9 +369,7 @@ public static class DB
     }
 
 
-    // =========================================
     // USAR OBJETO
-    // =========================================
 
     public static void usarObjeto(
         int idPartida,
@@ -415,9 +394,7 @@ public static class DB
     }
 
 
-    // =========================================
     // COMPLETAR PARTIDA
-    // =========================================
 
     public static void completarPartida(int idPartida)
     {
@@ -439,9 +416,7 @@ public static class DB
     }
 
 
-    // =========================================
     // PERDER PARTIDA
-    // =========================================
 
     public static void perderPartida(int idPartida)
     {
@@ -463,9 +438,7 @@ public static class DB
     }
 
 
-    // =========================================
     // BUSCAR SALA
-    // =========================================
 
     public static Sala? buscarSala(int numeroSala)
     {
@@ -487,9 +460,7 @@ public static class DB
     }
 
 
-    // =========================================
     // BUSCAR INVENTARIO
-    // =========================================
 
     public static List<Objeto> buscarInventario(int idPartida)
     {

@@ -92,18 +92,15 @@ public class GameController : Controller
             return RedirectToAction("Saved");
         }
 
-        if (partida.Estado == "COMPLETADA")
-        {
-            return RedirectToAction("Saved");
-        }
-
-        if (partida.Estado == "PERDIDA")
+        if (partida.FechaFin != null)
         {
             return RedirectToAction("Saved");
         }
 
         return IrASala(partida.IdSalaActual, partida.Id);
     }
+
+
 
     public IActionResult NuevaPartida(int numeroPartida)
     {
@@ -275,13 +272,14 @@ public class GameController : Controller
 
         if (!perteneceAlJugador)
         {
-            return RedirectToAction("Saved");
+            return BadRequest();
         }
 
         DB.completarPartida(idPartida);
 
-        return RedirectToAction("Sala7", new { idPartida = idPartida });
+        return Ok();
     }
+
     [HttpPost]
     public IActionResult PerderPartida(int idPartida)
     {

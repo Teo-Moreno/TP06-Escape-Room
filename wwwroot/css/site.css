@@ -801,107 +801,445 @@ header {
 }
 
 .auth-container {
-    min-height: calc(100vh - 70px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 40px 20px;
-    box-sizing: border-box;
+  min-height: calc(100vh - 70px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+  box-sizing: border-box;
 }
 
 .auth-box {
-    width: 420px;
-    padding: 45px;
-    background: #111;
-    border: 1px solid #333;
-    border-radius: 10px;
-    box-sizing: border-box;
-    text-align: center;
+  width: 420px;
+  padding: 45px;
+  background: #111;
+  border: 1px solid #333;
+  border-radius: 10px;
+  box-sizing: border-box;
+  text-align: center;
 }
 
 .auth-box h1 {
-    margin: 0 0 10px;
-    color: #f5f5f5;
-    font-size: 34px;
-    letter-spacing: 6px;
+  margin: 0 0 10px;
+  color: #f5f5f5;
+  font-size: 34px;
+  letter-spacing: 6px;
 }
 
 .auth-box h2 {
-    margin: 0 0 35px;
-    color: #999;
-    font-size: 15px;
-    letter-spacing: 3px;
+  margin: 0 0 35px;
+  color: #999;
+  font-size: 15px;
+  letter-spacing: 3px;
 }
 
 .auth-field {
-    margin-bottom: 20px;
-    text-align: left;
+  margin-bottom: 20px;
+  text-align: left;
 }
 
 .auth-field label {
-    display: block;
-    margin-bottom: 7px;
-    color: #f5f5f5;
-    font-size: 14px;
+  display: block;
+  margin-bottom: 7px;
+  color: #f5f5f5;
+  font-size: 14px;
 }
 
 .auth-field input {
-    width: 100%;
-    height: 42px;
-    padding: 0 12px;
-    box-sizing: border-box;
+  width: 100%;
+  height: 42px;
+  padding: 0 12px;
+  box-sizing: border-box;
 
-    background: #1a1a1a;
-    border: 1px solid #444;
-    border-radius: 5px;
+  background: #1a1a1a;
+  border: 1px solid #444;
+  border-radius: 5px;
 
-    color: #f5f5f5;
-    font-size: 14px;
-    outline: none;
+  color: #f5f5f5;
+  font-size: 14px;
+  outline: none;
 }
 
 .auth-field input:focus {
-    border-color: #777;
+  border-color: #777;
 }
 
 .auth-field span {
-    display: block;
-    margin-top: 5px;
-    color: #aaa;
-    font-size: 12px;
+  display: block;
+  margin-top: 5px;
+  color: #aaa;
+  font-size: 12px;
 }
 
 .auth-btn {
-    width: 100%;
-    height: 45px;
-    margin-top: 10px;
+  width: 100%;
+  height: 45px;
+  margin-top: 10px;
 
-    background: #222;
-    border: 1px solid #555;
-    border-radius: 5px;
+  background: #222;
+  border: 1px solid #555;
+  border-radius: 5px;
 
-    color: #f5f5f5;
-    font-weight: bold;
-    letter-spacing: 2px;
-    cursor: pointer;
+  color: #f5f5f5;
+  font-weight: bold;
+  letter-spacing: 2px;
+  cursor: pointer;
 
-    transition: background 0.2s, border-color 0.2s;
+  transition:
+    background 0.2s,
+    border-color 0.2s;
 }
 
 .auth-btn:hover {
-    background: #333;
-    border-color: #777;
+  background: #333;
+  border-color: #777;
 }
 
 .auth-link {
-    display: block;
-    margin-top: 25px;
+  display: block;
+  margin-top: 25px;
 
-    color: #aaa;
-    font-size: 13px;
-    text-decoration: none;
+  color: #aaa;
+  font-size: 13px;
+  text-decoration: none;
 }
 
 .auth-link:hover {
-    color: #f5f5f5;
+  color: #f5f5f5;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: #050505;
+  color: #e8e8e8;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body.asylum-body {
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+.asylum-room {
+  min-height: 100vh;
+  padding-top: 70px;
+  box-sizing: border-box;
+  background: #050505;
+}
+
+.asylum-stage {
+  position: relative;
+  width: min(1500px, 96vw);
+  height: calc(100vh - 100px);
+  min-height: 600px;
+  margin: 15px auto;
+  overflow: hidden;
+  background: #000;
+  border: 1px solid #202020;
+  box-shadow: 0 0 45px rgba(0, 0, 0, 0.9);
+}
+
+.asylum-scene {
+  position: absolute;
+  inset: 0;
+  display: none;
+}
+
+.asylum-scene.active {
+  display: block;
+}
+
+.asylum-scene-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  user-select: none;
+}
+
+.scene-dark::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.22);
+  pointer-events: none;
+}
+
+.scene-darker::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.48);
+  pointer-events: none;
+}
+
+.scene-vignette::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: radial-gradient(
+    circle,
+    transparent 38%,
+    rgba(0, 0, 0, 0.75) 100%
+  );
+}
+
+.scene-caption {
+  position: absolute;
+  z-index: 8;
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%);
+  width: min(850px, 86%);
+  padding: 16px 22px;
+  box-sizing: border-box;
+  background: rgba(0, 0, 0, 0.82);
+  border: 1px solid #555;
+  text-align: center;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+}
+
+.scene-caption strong {
+  display: block;
+  margin-bottom: 7px;
+  color: #fff;
+}
+
+.hotspot {
+  position: absolute;
+  z-index: 10;
+  min-width: 115px;
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  background: rgba(0, 0, 0, 0.62);
+  color: #fff;
+  cursor: pointer;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 12px;
+  transition:
+    background 0.18s,
+    border-color 0.18s,
+    transform 0.18s;
+}
+
+.hotspot:hover {
+  background: rgba(70, 70, 70, 0.82);
+  border-color: #fff;
+  transform: scale(1.03);
+}
+
+.hotspot.small {
+  min-width: 85px;
+  min-height: 36px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.overlay {
+  position: fixed;
+  z-index: 999999;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.92);
+}
+
+.overlay-content {
+  width: min(720px, 88vw);
+  text-align: center;
+  padding: 38px;
+  box-sizing: border-box;
+}
+
+.overlay-content h2 {
+  margin-top: 0;
+  font-size: 30px;
+  letter-spacing: 0.08em;
+}
+
+.overlay-content p {
+  font-size: 18px;
+  line-height: 1.7;
+  color: #d2d2d2;
+}
+
+.overlay-input {
+  width: min(430px, 85vw);
+  padding: 14px;
+  margin: 18px auto 10px;
+  display: block;
+  box-sizing: border-box;
+  background: #111;
+  color: #fff;
+  border: 1px solid #666;
+  text-align: center;
+  font-size: 20px;
+}
+
+.overlay-button {
+  min-width: 150px;
+  padding: 12px 22px;
+  border: 1px solid #777;
+  background: #191919;
+  color: white;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.overlay-button:hover {
+  background: #292929;
+}
+
+.puzzle-error {
+  min-height: 24px;
+  color: #d65c5c;
+  margin: 4px 0 12px;
+}
+
+.transition-black {
+  position: fixed;
+  z-index: 1000000;
+  inset: 0;
+  background: #000;
+}
+
+.position-top-left {
+  left: 7%;
+  top: 14%;
+}
+.position-top-right {
+  right: 7%;
+  top: 14%;
+}
+.position-mid-left {
+  left: 10%;
+  top: 48%;
+}
+.position-mid-right {
+  right: 10%;
+  top: 48%;
+}
+.position-bottom-left {
+  left: 8%;
+  bottom: 16%;
+}
+.position-bottom-right {
+  right: 8%;
+  bottom: 16%;
+}
+.position-center {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.position-center:hover {
+  transform: translate(-50%, -50%) scale(1.03);
+}
+
+.timer {
+  position: absolute;
+  z-index: 20;
+  top: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #e51c23;
+  font-size: clamp(42px, 6vw, 82px);
+  font-weight: 900;
+  text-shadow: 0 0 18px #000;
+}
+
+.timer.warning {
+  animation: timerPulse 0.5s infinite alternate;
+}
+
+@keyframes timerPulse {
+  from {
+    transform: translateX(-50%) scale(1);
+  }
+  to {
+    transform: translateX(-50%) scale(1.12);
+  }
+}
+
+.news-frame {
+  position: absolute;
+  z-index: 8;
+  left: 13%;
+  top: 14%;
+  width: 74%;
+  height: 66%;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 30px #000;
+}
+
+.fade-in {
+  animation: fadeIn 0.7s ease both;
+}
+
+.shake {
+  animation: shake 0.35s linear;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-7px, 3px);
+  }
+  40% {
+    transform: translate(6px, -2px);
+  }
+  60% {
+    transform: translate(-5px, -3px);
+  }
+  80% {
+    transform: translate(5px, 2px);
+  }
+}
+
+@media (max-width: 900px) {
+  .asylum-stage {
+    width: 100vw;
+    height: calc(100vh - 85px);
+    min-height: 480px;
+    margin: 8px 0;
+    border-left: 0;
+    border-right: 0;
+  }
+
+  .scene-caption {
+    bottom: 12px;
+    font-size: 13px;
+  }
+
+  .hotspot {
+    min-width: 90px;
+    min-height: 38px;
+    padding: 8px;
+    font-size: 10px;
+  }
 }
