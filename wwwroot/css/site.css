@@ -846,6 +846,176 @@ img {
   background: linear-gradient(90deg, #8a7a5c, #d8c68a);
 }
 
+/* Teclado numérico de las puertas */
+.kp {
+  width: 230px;
+  padding: 16px;
+  background: linear-gradient(#4a4d4c, #2f3231);
+  border: 2px solid #1c1e1d;
+  border-radius: 8px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.8);
+}
+
+.kp-display {
+  height: 44px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0f1a12;
+  border: 2px solid #111;
+  border-radius: 3px;
+  color: #7ee08a;
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 24px;
+  letter-spacing: 6px;
+}
+
+.kp-display--ok {
+  color: #9dff9d;
+}
+
+.kp-display--mal {
+  color: var(--accent-soft);
+}
+
+.kp-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.kp-key {
+  height: 42px;
+  border: 1px solid #1a1a1a;
+  border-radius: 4px;
+  background: linear-gradient(#d8d6d0, #a9a7a1);
+  color: #1b1b1b;
+  font: inherit;
+  font-weight: 700;
+  font-size: 17px;
+  cursor: pointer;
+}
+
+.kp-key:active {
+  transform: translateY(1px);
+  background: #9a9892;
+}
+
+.kp-key--accion {
+  font-size: 10px;
+  letter-spacing: 1px;
+}
+
+/* Minijuego de las antorchas */
+.pz--ancho {
+  width: min(900px, 100%);
+}
+
+.torch-hud {
+  width: min(520px, 100%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #d8c68a;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.torch-bar {
+  flex: 1;
+}
+
+.torch-area {
+  position: relative;
+  width: 100%;
+  height: min(46vh, 420px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #000;
+  border: 1px solid #151515;
+  border-radius: 4px;
+}
+
+.torch-luz {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(255, 150, 50, 0.28), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+}
+
+.torch {
+  position: absolute;
+  width: 40px;
+  height: 72px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  animation: aparecer 0.12s ease both;
+}
+
+.torch svg {
+  width: 100%;
+  height: 100%;
+}
+
+.torch-palo {
+  fill: #5a3a1e;
+}
+
+.torch-tela {
+  fill: #8b7a5a;
+}
+
+.torch-llama {
+  fill: #3a2410;
+  transition: fill 0.1s;
+}
+
+.torch-nucleo {
+  fill: #20150a;
+}
+
+.torch--encendida .torch-llama {
+  fill: #ff8a1e;
+  filter: drop-shadow(0 0 10px #ff9a2e);
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: parpadeo 0.12s linear infinite alternate;
+}
+
+.torch--encendida .torch-nucleo {
+  fill: #ffe27a;
+}
+
+.torch--apagandose {
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.torch-ojos {
+  position: absolute;
+  width: 60px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  animation: aparecer 0.4s ease both;
+}
+
+.torch-ojos svg {
+  width: 100%;
+  height: 100%;
+  fill: #c0201a;
+  filter: drop-shadow(0 0 6px #ff2a1f);
+}
+
 /* Pantalla final */
 .pz--fin h2 {
   margin: 0;
@@ -901,6 +1071,12 @@ img {
 @keyframes brillo {
   50% {
     box-shadow: 0 0 0 6px rgba(216, 198, 138, 0.25);
+  }
+}
+
+@keyframes parpadeo {
+  to {
+    transform: scaleY(1.08) translateY(-1px);
   }
 }
 
