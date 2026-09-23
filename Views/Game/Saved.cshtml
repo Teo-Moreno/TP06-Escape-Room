@@ -1,42 +1,50 @@
 @{
-ViewData["Title"] = "Guardados";
+    ViewData["Title"] = "Partidas";
+    Partida?[] slots = ViewBag.Slots;
+    string[] nombresSalas = ViewBag.NombresSalas;
 }
 
+<div class="page">
+    <h1 class="page-title">PARTIDAS</h1>
 
-<div class="saved-container">
-
-    <h1>PARTIDAS GUARDADAS</h1>
-
-    <div class="save-slots">
-
-        @for (int i = 1; i <= 3; i++)
+    <div class="slots">
+        @for (int i = 0; i < slots.Length; i++)
         {
-            if (@ViewBag.SaveSlots[i-1] != null){
-                <div class="save-slot">
-                    <h2>PARTIDA @i</h2>
+            Partida? partida = slots[i];
+            int numero = i + 1;
 
-                    <p>Guardada en la sala @i</p>
+            <div class="slot @(partida == null ? "slot--empty" : "")">
+                <h2>PARTIDA @numero</h2>
 
-                    <a href="@Url.Action("Cargar", "Game", new { id = i })">
-                        CARGAR PARTIDA
-                    </a>
-                </div>
-            }
-            else{
-                <div class="save-slot">
-                    <h2>PARTIDA @i</h2>
+                @if (partida == null)
+                {
+                    <p class="muted">Vacía</p>
+                    <a class="btn btn--primary" href="@Url.Action("NuevaPartida", "Game", new { numeroPartida = numero })">NUEVA PARTIDA</a>
+                }
+                else if (partida.Completada)
+                {
+                    <p>Completada</p>
+                    <p class="muted small">@partida.FechaFin?.ToString("dd/MM/yyyy HH:mm")</p>
+                    <form action="@Url.Action("BorrarPartida", "Game")" method="post">
+                        <input type="hidden" name="idPartida" value="@partida.Id" />
+                        <button class="btn" type="submit">EMPEZAR DE NUEVO</button>
+                    </form>
+                }
+                else
+                {
+                    int sala = Math.Clamp(partida.IdSalaActual, 1, nombresSalas.Length);
 
-                    <p>Vacía</p>
-
-                    <a href="@Url.Action("NuevaPartida", "Game", new { numeroPartida = i })">
-                        NUEVA PARTIDA
-                    </a>
-                </div>
-            }
-
+                    <p>Sala @sala de @nombresSalas.Length · @nombresSalas[sala - 1]</p>
+                    <p class="muted small">Iniciada el @partida.FechaInicio.ToString("dd/MM/yyyy HH:mm")</p>
+                    <a class="btn btn--primary" href="@Url.Action("Jugar", "Game", new { idPartida = partida.Id })">CONTINUAR</a>
+                    <form action="@Url.Action("BorrarPartida", "Game")" method="post" class="slot-delete">
+                        <input type="hidden" name="idPartida" value="@partida.Id" />
+                        <button class="link" type="submit">Borrar partida</button>
+                    </form>
+                }
+            </div>
         }
-
-
     </div>
 
+    <p class="muted small center">El progreso se guarda automáticamente al terminar cada sala.</p>
 </div>

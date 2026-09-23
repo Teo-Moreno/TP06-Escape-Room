@@ -2,29 +2,29 @@
     ViewData["Title"] = "Iniciar sesión";
 }
 
-<div class="login-container">
+<div class="page page--center">
+    <div class="panel">
+        <h1 class="page-title">INICIAR SESIÓN</h1>
 
-    <h1>INICIAR SESIÓN</h1>
+        <form class="form" action="@Url.Action("Login", "Home")" method="post">
+            <label class="field">
+                <span>Nombre</span>
+                <input type="text" name="jugador" autocomplete="username" required />
+            </label>
 
-    <form action="@Url.Action("Login", "Home")" method="post">
+            <label class="field">
+                <span>Contraseña</span>
+                <input type="password" name="password" autocomplete="current-password" required />
+            </label>
 
-        <div class="login-field">
-            <label for="jugador">Nombre</label>
-            <input type="text" id="jugador" name="jugador" required />
-        </div>
+            @if (ViewBag.Error != null)
+            {
+                <p class="form-error">@ViewBag.Error</p>
+            }
 
-        <div class="login-field">
-            <label for="Contrasena">Contraseña</label>
-            <input type="password" id="Contrasena" name="password" required />
-        </div>
+            <button class="btn btn--primary" type="submit">INGRESAR</button>
+        </form>
 
-        @ViewBag.Error
-
-        <button type="submit">INGRESAR</button>
-
-    </form>
-
-    <a class="home-btn" href="@Url.Action("Register", "Home")">¿No tenes Cuenta? REGISTRARSE</a>
-
-
+        <a class="link" href="@Url.Action("Register", "Home")">¿No tenés cuenta? Registrate</a>
+    </div>
 </div>

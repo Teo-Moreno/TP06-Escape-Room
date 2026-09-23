@@ -1,5 +1,3 @@
-using System;
-
 namespace Tp06.Models
 {
     public class Partida
@@ -8,8 +6,9 @@ namespace Tp06.Models
         public int IdJugador { get; set; }
         public int IdSalaActual { get; set; }
         public DateTime FechaInicio { get; set; }
-        public DateTime FechaFin { get; set; }
-        public string NumeroPartida { get; set; }
-        public string Estado { get; set; }
+        public DateTime? FechaFin { get; set; }
+        public int NumeroPartida { get; set; }
+
+        public bool Completada => FechaFin != null;
     }
 }

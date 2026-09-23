@@ -6,13 +6,6 @@ namespace Tp06.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
-
-    public HomeController(ILogger<HomeController> logger)
-    {
-        _logger = logger;
-    }
-
     public IActionResult Index()
     {
         return View();
@@ -26,9 +19,7 @@ public class HomeController : Controller
     [HttpGet]
     public IActionResult Login()
     {
-        int? idJugador = HttpContext.Session.GetInt32("IdJugador");
-
-        if (idJugador != null)
+        if (HttpContext.Session.GetInt32("IdJugador") != null)
         {
             return RedirectToAction("Saved", "Game");
         }
@@ -39,7 +30,13 @@ public class HomeController : Controller
     [HttpPost]
     public IActionResult Login(string jugador, string password)
     {
-        Jugador? user = DB.BuscarJugador(jugador, password);
+        if (string.IsNullOrWhiteSpace(jugador) || string.IsNullOrEmpty(password))
+        {
+            ViewBag.Error = "Completá el nombre y la contraseña.";
+            return View();
+        }
+
+        Jugador? user = DB.BuscarJugador(jugador.Trim(), password);
 
         if (user == null)
         {
@@ -47,20 +44,10 @@ public class HomeController : Controller
             return View();
         }
 
-        HttpContext.Session.SetInt32(
-            "IdJugador",
-            user.Id
-        );
+        HttpContext.Session.SetInt32("IdJugador", user.Id);
+        HttpContext.Session.SetString("Nombre", user.Nombre);
 
-        HttpContext.Session.SetString(
-            "Nombre",
-            user.Nombre
-        );
-
-        return RedirectToAction(
-            "Saved",
-            "Game"
-        );
+        return RedirectToAction("Saved", "Game");
     }
 
     [HttpGet]
@@ -70,40 +57,31 @@ public class HomeController : Controller
     }
 
     [HttpPost]
-    public IActionResult Register(
-        string nombre,
-        string password,
-        string password2)
+    public IActionResult Register(string nombre, string password, string password2)
     {
+        if (string.IsNullOrWhiteSpace(nombre) || string.IsNullOrEmpty(password))
+        {
+            ViewBag.Error = "Completá el nombre y la contraseña.";
+            return View();
+        }
+
         if (password != password2)
         {
-            ViewBag.Error =
-                "Las contraseñas no coinciden.";
-
+            ViewBag.Error = "Las contraseñas no coinciden.";
             return View();
         }
 
-        Jugador? jugadorExistente =
-            DB.BuscarJugadorPorNombre(nombre);
+        nombre = nombre.Trim();
 
-
-        if (jugadorExistente != null)
+        if (DB.BuscarJugadorPorNombre(nombre) != null)
         {
-            ViewBag.Error =
-                "El nombre de jugador ya está registrado.";
-
+            ViewBag.Error = "El nombre de jugador ya está registrado.";
             return View();
         }
 
-        Jugador nuevoJugador = new Jugador
-        {
-            Nombre = nombre,
-            Password = password
-        };
+        DB.RegistrarJugador(new Jugador { Nombre = nombre, Password = password });
 
-        DB.RegistrarJugador(nuevoJugador);
-
-        return RedirectToAction("Login", "Home");
+        return RedirectToAction("Login");
     }
 
     [HttpGet]
@@ -114,20 +92,12 @@ public class HomeController : Controller
         return RedirectToAction("Index");
     }
 
-    [ResponseCache(
-        Duration = 0,
-        Location = ResponseCacheLocation.None,
-        NoStore = true
-    )]
+    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
-        return View(
-            new ErrorViewModel
-            {
-                RequestId =
-                    Activity.Current?.Id
-                    ?? HttpContext.TraceIdentifier
-            }
-        );
+        return View(new ErrorViewModel
+        {
+            RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
+        });
     }
 }

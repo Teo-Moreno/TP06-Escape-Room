@@ -2,43 +2,34 @@
     ViewData["Title"] = "Crear cuenta";
 }
 
-<div class="auth-container">
+<div class="page page--center">
+    <div class="panel">
+        <h1 class="page-title">CREAR CUENTA</h1>
 
-    <div class="auth-box">
+        <form class="form" action="@Url.Action("Register", "Home")" method="post">
+            <label class="field">
+                <span>Nombre</span>
+                <input type="text" name="nombre" maxlength="50" autocomplete="username" required />
+            </label>
 
-        <h1>THE ASYLUM</h1>
-        <h2>CREAR CUENTA</h2>
+            <label class="field">
+                <span>Contraseña</span>
+                <input type="password" name="password" autocomplete="new-password" required />
+            </label>
 
-        <form action="@Url.Action("Register", "Home")" method="post">
+            <label class="field">
+                <span>Repetir contraseña</span>
+                <input type="password" name="password2" autocomplete="new-password" required />
+            </label>
 
-            <div class="auth-field">
-                <label for="Nombre">Nombre</label>
-                <input type="text" id="Nombre" name="nombre" />
-            </div>
+            @if (ViewBag.Error != null)
+            {
+                <p class="form-error">@ViewBag.Error</p>
+            }
 
-            <div class="auth-field">
-                <label for="Password">Contraseña</label>
-                <input type="password" id="Password" name="password" />
-            </div>
-
-            <div class="auth-field">
-                <label for="ConfirmarPassword">Repetir contraseña</label>
-                <input type="password" id="ConfirmarPassword" name="password2" />
-            </div>
-
-            <button type="submit" class="auth-btn">
-                CREAR CUENTA
-            </button>
-
+            <button class="btn btn--primary" type="submit">CREAR CUENTA</button>
         </form>
 
-        @ViewBag.Error
-
-        <a class="auth-link"
-           href="@Url.Action("Index", "Home")">
-            YA TENGO UNA CUENTA
-        </a>
-
+        <a class="link" href="@Url.Action("Login", "Home")">Ya tengo una cuenta</a>
     </div>
-
 </div>

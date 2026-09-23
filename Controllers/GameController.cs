@@ -5,257 +5,108 @@ namespace Tp06.Controllers;
 
 public class GameController : Controller
 {
-    private readonly ILogger<GameController> _logger;
+    public const int CantidadSalas = 5;
+    private const int CantidadSlots = 3;
 
-    public GameController(ILogger<GameController> logger)
+    private static readonly string[] NombresSalas =
     {
-        _logger = logger;
-    }
+        "Las afueras",
+        "Recepción",
+        "Los pasillos",
+        "Sala de pacientes",
+        "El sótano"
+    };
 
     public IActionResult Saved()
     {
         int idJugador = ObtenerJugadorLogueado();
 
-        List<Partida> partidas = DB.buscarGuardados(idJugador);
-
-        ViewBag.SaveSlots = partidas;
-
-        return View();
-    }
-
-    public IActionResult Sala1(int idPartida)
-    {
-        CargarDatosSala(idPartida, 1);
-
-        return View();
-    }
-
-    public IActionResult Sala2(int idPartida)
-    {
-        CargarDatosSala(idPartida, 2);
-
-        return View();
-    }
-
-    public IActionResult Sala3(int idPartida)
-    {
-        CargarDatosSala(idPartida, 3);
-
-        return View();
-    }
-
-    public IActionResult Sala4(int idPartida)
-    {
-        CargarDatosSala(idPartida, 4);
-
-        return View();
-    }
-
-    public IActionResult Sala5(int idPartida)
-    {
-        CargarDatosSala(idPartida, 5);
-
-        return View();
-    }
-
-    public IActionResult Sala6(int idPartida)
-    {
-        CargarDatosSala(idPartida, 6);
-
-        return View();
-    }
-
-    public IActionResult Sala7(int idPartida)
-    {
-        CargarDatosSala(idPartida, 7);
-
-        return View();
-    }
-
-    public IActionResult Inventory(int idPartida)
-    {
-        List<Objeto> objetos = DB.buscarInventario(idPartida);
-
-        ViewBag.Objetos = objetos;
-        ViewBag.IdPartida = idPartida;
-
-        return View();
-    }
-    public IActionResult Cargar(int id)
-    {
-        int idJugador = ObtenerJugadorLogueado();
-
-        Partida partida = DB.buscarPartida(id, idJugador);
-
-        if (partida == null)
+        if (idJugador == 0)
         {
-            return RedirectToAction("Saved");
+            return RedirectToAction("Login", "Home");
         }
 
-        if (partida.FechaFin != null)
+        Partida?[] slots = new Partida?[CantidadSlots];
+
+        foreach (Partida partida in DB.BuscarPartidas(idJugador))
         {
-            return RedirectToAction("Saved");
+            if (partida.NumeroPartida >= 1 && partida.NumeroPartida <= CantidadSlots)
+            {
+                slots[partida.NumeroPartida - 1] = partida;
+            }
         }
 
-        return IrASala(partida.IdSalaActual, partida.Id);
+        ViewBag.Slots = slots;
+        ViewBag.NombresSalas = NombresSalas;
+
+        return View();
     }
-
-
 
     public IActionResult NuevaPartida(int numeroPartida)
     {
         int idJugador = ObtenerJugadorLogueado();
 
-        bool existePartida = DB.existePartida(idJugador, numeroPartida);
+        if (idJugador == 0)
+        {
+            return RedirectToAction("Login", "Home");
+        }
 
-        if (existePartida)
+        if (numeroPartida < 1 || numeroPartida > CantidadSlots || DB.ExistePartida(idJugador, numeroPartida))
         {
             return RedirectToAction("Saved");
         }
 
-        Partida partida = DB.crearPartida(
-            idJugador,
-            numeroPartida,
-            1
-        );
+        Partida partida = DB.CrearPartida(idJugador, numeroPartida);
 
-        return RedirectToAction(
-            "Sala1",
-            new { idPartida = partida.Id }
-        );
+        return RedirectToAction("Jugar", new { idPartida = partida.Id });
     }
 
-    [HttpPost]
-    public IActionResult Guardar(int idPartida, int idSala)
+    public IActionResult Cargar(int id)
+    {
+        return RedirectToAction("Jugar", new { idPartida = id });
+    }
+
+    public IActionResult Jugar(int idPartida)
     {
         int idJugador = ObtenerJugadorLogueado();
 
-        bool perteneceAlJugador = DB.partidaPerteneceAJugador(
-            idPartida,
-            idJugador
-        );
+        if (idJugador == 0)
+        {
+            return RedirectToAction("Login", "Home");
+        }
 
-        if (!perteneceAlJugador)
+        Partida? partida = DB.BuscarPartida(idPartida, idJugador);
+
+        if (partida == null || partida.Completada)
         {
             return RedirectToAction("Saved");
         }
 
-        DB.guardarPartida(
-            idPartida,
-            idSala
-        );
+        int sala = Math.Clamp(partida.IdSalaActual, 1, CantidadSalas);
 
-        return RedirectToAction("Saved");
+        ViewBag.IdPartida = partida.Id;
+        ViewBag.Sala = sala;
+        ViewBag.NombreSala = NombresSalas[sala - 1];
+        ViewBag.TieneLlave = DB.BuscarProgreso(partida.Id, "llave") == "1";
+
+        return View("Sala");
     }
 
     [HttpPost]
-    public IActionResult GuardarProgreso(
-        int idPartida,
-        string clave,
-        string valor)
+    public IActionResult AvanzarSala(int idPartida, int sala)
     {
-        int idJugador = ObtenerJugadorLogueado();
+        Partida? partida = DB.BuscarPartida(idPartida, ObtenerJugadorLogueado());
 
-        bool perteneceAlJugador = DB.partidaPerteneceAJugador(
-            idPartida,
-            idJugador
-        );
-
-        if (!perteneceAlJugador)
+        if (partida == null || partida.Completada)
         {
             return BadRequest();
         }
 
-        DB.guardarProgreso(
-            idPartida,
-            clave,
-            valor
-        );
-
-        return Ok();
-    }
-
-    [HttpGet]
-    public IActionResult ObtenerProgreso(
-        int idPartida,
-        string clave)
-    {
-        int idJugador = ObtenerJugadorLogueado();
-
-        bool perteneceAlJugador = DB.partidaPerteneceAJugador(
-            idPartida,
-            idJugador
-        );
-
-        if (!perteneceAlJugador)
+        // Solo se puede avanzar de a una sala: no se pueden saltear salas desde la URL.
+        if (sala == partida.IdSalaActual + 1 && sala <= CantidadSalas)
         {
-            return BadRequest();
+            DB.ActualizarSala(idPartida, sala);
         }
-
-        string valor = DB.buscarProgreso(
-            idPartida,
-            clave
-        );
-
-        return Json(valor);
-    }
-
-    [HttpPost]
-    public IActionResult AgregarObjeto(
-        int idPartida,
-        int idObjeto)
-    {
-        int idJugador = ObtenerJugadorLogueado();
-
-        bool perteneceAlJugador = DB.partidaPerteneceAJugador(
-            idPartida,
-            idJugador
-        );
-
-        if (!perteneceAlJugador)
-        {
-            return BadRequest();
-        }
-
-        DB.agregarObjetoInventario(
-            idPartida,
-            idObjeto
-        );
-
-        return Ok();
-    }
-
-    [HttpPost]
-    public IActionResult UsarObjeto(
-        int idPartida,
-        int idObjeto)
-    {
-        int idJugador = ObtenerJugadorLogueado();
-
-        bool perteneceAlJugador = DB.partidaPerteneceAJugador(
-            idPartida,
-            idJugador
-        );
-
-        if (!perteneceAlJugador)
-        {
-            return BadRequest();
-        }
-
-        bool tieneObjeto = DB.tieneObjeto(
-            idPartida,
-            idObjeto
-        );
-
-        if (!tieneObjeto)
-        {
-            return BadRequest();
-        }
-
-        DB.usarObjeto(
-            idPartida,
-            idObjeto
-        );
 
         return Ok();
     }
@@ -263,91 +114,61 @@ public class GameController : Controller
     [HttpPost]
     public IActionResult CompletarPartida(int idPartida)
     {
-        int idJugador = ObtenerJugadorLogueado();
+        Partida? partida = DB.BuscarPartida(idPartida, ObtenerJugadorLogueado());
 
-        bool perteneceAlJugador = DB.partidaPerteneceAJugador(
-            idPartida,
-            idJugador
-        );
-
-        if (!perteneceAlJugador)
+        if (partida == null || partida.IdSalaActual != CantidadSalas)
         {
             return BadRequest();
         }
 
-        DB.completarPartida(idPartida);
+        DB.CompletarPartida(idPartida);
 
         return Ok();
     }
 
     [HttpPost]
-    public IActionResult PerderPartida(int idPartida)
+    public IActionResult BorrarPartida(int idPartida)
     {
-        int idJugador = ObtenerJugadorLogueado();
+        Partida? partida = DB.BuscarPartida(idPartida, ObtenerJugadorLogueado());
 
-        bool perteneceAlJugador = DB.partidaPerteneceAJugador(
-            idPartida,
-            idJugador
-        );
-
-        if (!perteneceAlJugador)
+        if (partida != null)
         {
-            return RedirectToAction("Saved");
+            DB.BorrarPartida(idPartida);
         }
 
-        DB.perderPartida(idPartida);
-
         return RedirectToAction("Saved");
+    }
+
+    [HttpPost]
+    public IActionResult GuardarProgreso(int idPartida, string clave, string valor)
+    {
+        Partida? partida = DB.BuscarPartida(idPartida, ObtenerJugadorLogueado());
+
+        if (partida == null || string.IsNullOrWhiteSpace(clave))
+        {
+            return BadRequest();
+        }
+
+        DB.GuardarProgreso(idPartida, clave, valor ?? "");
+
+        return Ok();
+    }
+
+    [HttpGet]
+    public IActionResult ObtenerProgreso(int idPartida, string clave)
+    {
+        Partida? partida = DB.BuscarPartida(idPartida, ObtenerJugadorLogueado());
+
+        if (partida == null)
+        {
+            return BadRequest();
+        }
+
+        return Json(DB.BuscarProgreso(idPartida, clave));
     }
 
     private int ObtenerJugadorLogueado()
     {
-        int idJugador = HttpContext.Session.GetInt32("IdJugador") ?? 0;
-
-        return idJugador;
-    }
-
-    private void CargarDatosSala(
-        int idPartida,
-        int numeroSala)
-    {
-        int idJugador = ObtenerJugadorLogueado();
-
-        bool perteneceAlJugador = DB.partidaPerteneceAJugador(
-            idPartida,
-            idJugador
-        );
-
-        if (!perteneceAlJugador)
-        {
-            return;
-        }
-
-        Partida partida = DB.buscarPartida(
-            idPartida,
-            idJugador
-        );
-
-        Sala sala = DB.buscarSala(numeroSala);
-
-        List<Objeto> objetos = DB.buscarInventario(idPartida);
-
-        ViewBag.Partida = partida;
-        ViewBag.Sala = sala;
-        ViewBag.Objetos = objetos;
-        ViewBag.IdPartida = idPartida;
-    }
-
-    private IActionResult IrASala(
-        int idSala,
-        int idPartida)
-    {
-        if (idSala <= 7){
-            return RedirectToAction(
-                    "Sala" + idSala.ToString(),
-                    new { idPartida = idPartida }
-                );
-        }
-        return RedirectToAction("Saved");
+        return HttpContext.Session.GetInt32("IdJugador") ?? 0;
     }
 }

@@ -1,34 +1,36 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="es">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Tp06</title>
-    <script type="importmap"></script>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <title>@ViewData["Title"] - The Asylum</title>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Tp06.styles.css" asp-append-version="true" />
 </head>
-<body>
-    <header>
-        <a class="header-btn" href="@Url.Action("Index", "Home")">Inicio</a>
-        <a class="header-btn" href="@Url.Action("Saved", "Game")">Guardados</a>
-        <a class="header-btn" href="@Url.Action("Credits", "Game")">Créditos</a>
+@{
+    string? nombreJugador = Context.Session.GetString("Nombre");
+}
+<body class="@ViewData["BodyClass"]">
+    <header class="site-header">
+        <a class="site-brand" href="@Url.Action("Index", "Home")">THE ASYLUM</a>
+        <nav class="site-nav">
+            <a class="header-btn" href="@Url.Action("Index", "Home")">Inicio</a>
+            <a class="header-btn" href="@Url.Action("Saved", "Game")">Partidas</a>
+            <a class="header-btn" href="@Url.Action("Credits", "Home")">Créditos</a>
+            @if (nombreJugador != null)
+            {
+                <a class="header-btn header-btn--ghost" href="@Url.Action("Logout", "Home")">Salir (@nombreJugador)</a>
+            }
+            else
+            {
+                <a class="header-btn header-btn--ghost" href="@Url.Action("Login", "Home")">Ingresar</a>
+            }
+        </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - Tp06 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <main role="main">
+        @RenderBody()
+    </main>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

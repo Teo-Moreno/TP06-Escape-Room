@@ -1,50 +1,32 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@{
+    ViewData["Title"] = "Inicio";
+    ViewData["BodyClass"] = "home-body";
+    bool logueado = Context.Session.GetInt32("IdJugador") != null;
 }
 
-<div class="home-container">
-
-    <div class="home-title">
-        <h1>THE ASYLUM</h1>
-        <h2>BLACKWOOD PSYCHIATRIC HOSPITAL</h2>
-    </div>
+<div class="home">
+    <img class="home-bg" src="~/img/Habitacion 1/2.png" alt="" />
 
     <div class="home-content">
-
-        <div class="home-image">
-            <img src="../../wwwroot/images/asylum.png"
-                 alt="Blackwood Psychiatric Hospital">
-        </div>
+        <p class="home-kicker">BLACKWOOD PSYCHIATRIC HOSPITAL · EST. 1888</p>
+        <h1 class="home-title">THE ASYLUM</h1>
 
         <div class="home-intro">
             <p>17/04/2013 — Marylin Crose desapareció.</p>
-            <p>13 años después, Jon Hermendoff vuelve al hospital.</p>
+            <p>Trece años después, Jon Hermendoff vuelve al lugar donde la vieron por última vez.</p>
         </div>
 
         <div class="home-menu">
-
-            <a class="home-card" href="@Url.Action("Login", "Home")">
-                <span>COMENZAR</span>
-                <small>Continuar hacia el hospital</small>
-            </a>
-
-            <a class="home-card" href="@Url.Action("Register", "Home")">
-                <span>REGISTRARSE</span>
-                <small>Crear una nueva cuenta</small>
-            </a>
-
-            <a class="home-card" href="@Url.Action("Logout", "Home")">
-                <span>CERRAR SESIÓN</span>
-                <small>Salir de la sesión actual</small>
-            </a>
-
-            <a class="home-card" href="@Url.Action("Credits", "Home")">
-                <span>CRÉDITOS</span>
-                <small>Información del proyecto</small>
-            </a>
-
+            @if (logueado)
+            {
+                <a class="btn btn--primary" href="@Url.Action("Saved", "Game")">JUGAR</a>
+            }
+            else
+            {
+                <a class="btn btn--primary" href="@Url.Action("Login", "Home")">COMENZAR</a>
+                <a class="btn" href="@Url.Action("Register", "Home")">REGISTRARSE</a>
+            }
+            <a class="btn" href="@Url.Action("Credits", "Home")">CRÉDITOS</a>
         </div>
-
     </div>
-
 </div>

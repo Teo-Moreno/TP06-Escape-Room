@@ -8,8 +8,26 @@ public static class DB
     private static string _connectionString =
         @"Server=localhost;Database=Escape Room;User Id=alumno;Password=alumno;TrustServerCertificate=True;";
 
+    // JUGADORES
 
-    public static Jugador? BuscarJugadorPorNombre(string jugador)
+    public static Jugador? BuscarJugador(string nombre, string password)
+    {
+        using (SqlConnection connection = new SqlConnection(_connectionString))
+        {
+            string sql = @"
+                SELECT *
+                FROM Jugador
+                WHERE Nombre = @Nombre
+                AND Password = @Password";
+
+            return connection.QueryFirstOrDefault<Jugador>(
+                sql,
+                new { Nombre = nombre, Password = password }
+            );
+        }
+    }
+
+    public static Jugador? BuscarJugadorPorNombre(string nombre)
     {
         using (SqlConnection connection = new SqlConnection(_connectionString))
         {
@@ -20,10 +38,7 @@ public static class DB
 
             return connection.QueryFirstOrDefault<Jugador>(
                 sql,
-                new
-                {
-                    Nombre = jugador
-                }
+                new { Nombre = nombre }
             );
         }
     }
@@ -33,107 +48,19 @@ public static class DB
         using (SqlConnection connection = new SqlConnection(_connectionString))
         {
             string sql = @"
-                INSERT INTO Jugador
-                (
-                    Nombre,
-                    Password
-                )
-                VALUES
-                (
-                    @Nombre,
-                    @Password
-                )";
+                INSERT INTO Jugador (Nombre, Password)
+                VALUES (@Nombre, @Password)";
 
             connection.Execute(
                 sql,
-                new
-                {
-                    Nombre = jugador.Nombre,
-                    Password = jugador.Password
-                }
+                new { jugador.Nombre, jugador.Password }
             );
         }
     }
 
-    
-    public static Jugador? BuscarJugador(string jugador, string password)
-    {
-        using (SqlConnection connection = new SqlConnection(_connectionString))
-        {
-            string sql = @"
-                SELECT *
-                FROM Jugador
-                WHERE Nombre = @Nombre
-                AND Password = @Password";
+    // PARTIDAS
 
-            return connection.QueryFirstOrDefault<Jugador>(
-                sql,
-                new
-                {
-                    Nombre = jugador,
-                    Password = password
-                }
-            );
-        }
-    }
-        
-    public static Jugador? BuscarUsuario(string Nombre, string password)
-    {
-        using (SqlConnection connection = new SqlConnection(_connectionString))
-        {
-            string sql = @"
-                SELECT *
-                FROM Jugador
-                WHERE Nombre = @Nombre
-                AND Password = @Password";
-
-            return connection.QueryFirstOrDefault<Jugador>(
-                sql,
-                new
-                {
-                    Nombre = Nombre,
-                    Password = password
-                }
-            );
-        }
-    }
-
-    public static Jugador? BuscarUsuarioPorNombre(string Nombre)
-    {
-        using (SqlConnection connection = new SqlConnection(_connectionString))
-        {
-            string sql = @"
-                SELECT *
-                FROM Jugador
-                WHERE Nombre = @Nombre";
-
-            return connection.QueryFirstOrDefault<Jugador>(
-                sql,
-                new
-                {
-                    Nombre = Nombre
-                }
-            );
-        }
-    }
-
-    public static void RegistrarUsuario(Jugador usuario)
-    {
-        using (SqlConnection connection = new SqlConnection(_connectionString))
-        {
-            string sql = @"
-                INSERT INTO Jugador
-                (Nombre, Password)
-                VALUES
-                (@Nombre, @Password)";
-
-            connection.Execute(sql, usuario);
-        }
-    }
-
-    // BUSCAR GUARDADOS
-
-    public static List<Partida> buscarGuardados(int idJugador)
+    public static List<Partida> BuscarPartidas(int idJugador)
     {
         using (SqlConnection connection = new SqlConnection(_connectionString))
         {
@@ -145,44 +72,29 @@ public static class DB
 
             return connection.Query<Partida>(
                 sql,
-                new
-                {
-                    IdJugador = idJugador
-                }
+                new { IdJugador = idJugador }
             ).ToList();
         }
     }
 
-
-    // BUSCAR PARTIDA
-
-    public static Partida? buscarPartida(int id, int idJugador)
+    public static Partida? BuscarPartida(int idPartida, int idJugador)
     {
         using (SqlConnection connection = new SqlConnection(_connectionString))
         {
             string sql = @"
                 SELECT *
                 FROM Partida
-                WHERE Id = @Id
+                WHERE Id = @IdPartida
                 AND IdJugador = @IdJugador";
 
             return connection.QueryFirstOrDefault<Partida>(
                 sql,
-                new
-                {
-                    Id = id,
-                    IdJugador = idJugador
-                }
+                new { IdPartida = idPartida, IdJugador = idJugador }
             );
         }
     }
 
-
-    // EXISTE PARTIDA
-
-    public static bool existePartida(
-        int idJugador,
-        int numeroPartida)
+    public static bool ExistePartida(int idJugador, int numeroPartida)
     {
         using (SqlConnection connection = new SqlConnection(_connectionString))
         {
@@ -194,64 +106,30 @@ public static class DB
 
             int cantidad = connection.ExecuteScalar<int>(
                 sql,
-                new
-                {
-                    IdJugador = idJugador,
-                    NumeroPartida = numeroPartida
-                }
+                new { IdJugador = idJugador, NumeroPartida = numeroPartida }
             );
 
             return cantidad > 0;
         }
     }
 
-
-    // CREAR PARTIDA
-
-    public static Partida crearPartida(
-        int idJugador,
-        int numeroPartida,
-        int idSala)
+    public static Partida CrearPartida(int idJugador, int numeroPartida)
     {
         using (SqlConnection connection = new SqlConnection(_connectionString))
         {
             string sql = @"
-                INSERT INTO Partida
-                (
-                    IdJugador,
-                    IdSalaActual,
-                    FechaInicio,
-                    FechaFin,
-                    NumeroPartida
-                )
+                INSERT INTO Partida (IdJugador, IdSalaActual, FechaInicio, FechaFin, NumeroPartida)
                 OUTPUT INSERTED.*
-                VALUES
-                (
-                    @IdJugador,
-                    @IdSalaActual,
-                    GETDATE(),
-                    NULL,
-                    @NumeroPartida
-                )";
+                VALUES (@IdJugador, 1, GETDATE(), NULL, @NumeroPartida)";
 
             return connection.QuerySingle<Partida>(
                 sql,
-                new
-                {
-                    IdJugador = idJugador,
-                    IdSalaActual = idSala,
-                    NumeroPartida = numeroPartida
-                }
+                new { IdJugador = idJugador, NumeroPartida = numeroPartida }
             );
         }
     }
 
-
-    // GUARDAR PARTIDA
-
-    public static void guardarPartida(
-        int idPartida,
-        int idSala)
+    public static void ActualizarSala(int idPartida, int idSala)
     {
         using (SqlConnection connection = new SqlConnection(_connectionString))
         {
@@ -262,101 +140,65 @@ public static class DB
 
             connection.Execute(
                 sql,
-                new
-                {
-                    IdPartida = idPartida,
-                    IdSala = idSala
-                }
+                new { IdPartida = idPartida, IdSala = idSala }
             );
         }
     }
 
-
-    // PARTIDA PERTENECE AL JUGADOR
-
-    public static bool partidaPerteneceAJugador(
-        int idPartida,
-        int idJugador)
+    public static void CompletarPartida(int idPartida)
     {
         using (SqlConnection connection = new SqlConnection(_connectionString))
         {
             string sql = @"
-                SELECT COUNT(*)
-                FROM Partida
+                UPDATE Partida
+                SET FechaFin = GETDATE()
                 WHERE Id = @IdPartida
-                AND IdJugador = @IdJugador";
+                AND FechaFin IS NULL";
 
-            int cantidad = connection.ExecuteScalar<int>(
-                sql,
-                new
-                {
-                    IdPartida = idPartida,
-                    IdJugador = idJugador
-                }
-            );
-
-            return cantidad > 0;
+            connection.Execute(sql, new { IdPartida = idPartida });
         }
     }
 
-
-    // GUARDAR PROGRESO
-
-    public static void guardarProgreso(
-        int idPartida,
-        string clave,
-        string valor)
+    public static void BorrarPartida(int idPartida)
     {
         using (SqlConnection connection = new SqlConnection(_connectionString))
         {
             string sql = @"
-                IF EXISTS
-                (
-                    SELECT 1
-                    FROM Progreso
-                    WHERE IdPartida = @IdPartida
-                    AND Clave = @Clave
-                )
-                BEGIN
+                DELETE FROM Progreso WHERE IdPartida = @IdPartida;
+
+                IF OBJECT_ID('Inventario') IS NOT NULL
+                    DELETE FROM Inventario WHERE IdPartida = @IdPartida;
+
+                DELETE FROM Partida WHERE Id = @IdPartida;";
+
+            connection.Execute(sql, new { IdPartida = idPartida });
+        }
+    }
+
+    // PROGRESO (pistas, objetos y escenas vistas dentro de una partida)
+
+    public static void GuardarProgreso(int idPartida, string clave, string valor)
+    {
+        using (SqlConnection connection = new SqlConnection(_connectionString))
+        {
+            string sql = @"
+                IF EXISTS (SELECT 1 FROM Progreso WHERE IdPartida = @IdPartida AND Clave = @Clave)
                     UPDATE Progreso
                     SET Valor = @Valor
                     WHERE IdPartida = @IdPartida
                     AND Clave = @Clave
-                END
                 ELSE
-                BEGIN
-                    INSERT INTO Progreso
-                    (
-                        IdPartida,
-                        Clave,
-                        Valor
-                    )
-                    VALUES
-                    (
-                        @IdPartida,
-                        @Clave,
-                        @Valor
-                    )
-                END";
+                    INSERT INTO Progreso (IdPartida, Clave, Valor)
+                    VALUES (@IdPartida, @Clave, @Valor)";
 
             connection.Execute(
                 sql,
-                new
-                {
-                    IdPartida = idPartida,
-                    Clave = clave,
-                    Valor = valor
-                }
+                new { IdPartida = idPartida, Clave = clave, Valor = valor }
             );
         }
     }
 
-
-    // BUSCAR PROGRESO
-
-    public static string? buscarProgreso(
-        int idPartida,
-        string clave)
+    public static string? BuscarProgreso(int idPartida, string clave)
     {
         using (SqlConnection connection = new SqlConnection(_connectionString))
         {
@@ -368,187 +210,8 @@ public static class DB
 
             return connection.QueryFirstOrDefault<string>(
                 sql,
-                new
-                {
-                    IdPartida = idPartida,
-                    Clave = clave
-                }
+                new { IdPartida = idPartida, Clave = clave }
             );
-        }
-    }
-
-
-    // AGREGAR OBJETO AL INVENTARIO
-
-    public static void agregarObjetoInventario(
-        int idPartida,
-        int idObjeto)
-    {
-        using (SqlConnection connection = new SqlConnection(_connectionString))
-        {
-            string sql = @"
-                INSERT INTO Inventario
-                (
-                    IdPartida,
-                    IdObjeto
-                )
-                VALUES
-                (
-                    @IdPartida,
-                    @IdObjeto
-                )";
-
-            connection.Execute(
-                sql,
-                new
-                {
-                    IdPartida = idPartida,
-                    IdObjeto = idObjeto
-                }
-            );
-        }
-    }
-
-
-    // TIENE OBJETO
-
-    public static bool tieneObjeto(
-        int idPartida,
-        int idObjeto)
-    {
-        using (SqlConnection connection = new SqlConnection(_connectionString))
-        {
-            string sql = @"
-                SELECT COUNT(*)
-                FROM Inventario
-                WHERE IdPartida = @IdPartida
-                AND IdObjeto = @IdObjeto";
-
-            int cantidad = connection.ExecuteScalar<int>(
-                sql,
-                new
-                {
-                    IdPartida = idPartida,
-                    IdObjeto = idObjeto
-                }
-            );
-
-            return cantidad > 0;
-        }
-    }
-
-
-    // USAR OBJETO
-
-    public static void usarObjeto(
-        int idPartida,
-        int idObjeto)
-    {
-        using (SqlConnection connection = new SqlConnection(_connectionString))
-        {
-            string sql = @"
-                DELETE FROM Inventario
-                WHERE IdPartida = @IdPartida
-                AND IdObjeto = @IdObjeto";
-
-            connection.Execute(
-                sql,
-                new
-                {
-                    IdPartida = idPartida,
-                    IdObjeto = idObjeto
-                }
-            );
-        }
-    }
-
-
-    // COMPLETAR PARTIDA
-
-    public static void completarPartida(int idPartida)
-    {
-        using (SqlConnection connection = new SqlConnection(_connectionString))
-        {
-            string sql = @"
-                UPDATE Partida
-                SET FechaFin = GETDATE()
-                WHERE Id = @IdPartida";
-
-            connection.Execute(
-                sql,
-                new
-                {
-                    IdPartida = idPartida
-                }
-            );
-        }
-    }
-
-
-    // PERDER PARTIDA
-
-    public static void perderPartida(int idPartida)
-    {
-        using (SqlConnection connection = new SqlConnection(_connectionString))
-        {
-            string sql = @"
-                UPDATE Partida
-                SET FechaFin = GETDATE()
-                WHERE Id = @IdPartida";
-
-            connection.Execute(
-                sql,
-                new
-                {
-                    IdPartida = idPartida
-                }
-            );
-        }
-    }
-
-
-    // BUSCAR SALA
-
-    public static Sala? buscarSala(int numeroSala)
-    {
-        using (SqlConnection connection = new SqlConnection(_connectionString))
-        {
-            string sql = @"
-                SELECT *
-                FROM Sala
-                WHERE Numero = @Numero";
-
-            return connection.QueryFirstOrDefault<Sala>(
-                sql,
-                new
-                {
-                    Numero = numeroSala
-                }
-            );
-        }
-    }
-
-
-    // BUSCAR INVENTARIO
-
-    public static List<Objeto> buscarInventario(int idPartida)
-    {
-        using (SqlConnection connection = new SqlConnection(_connectionString))
-        {
-            string sql = @"
-                SELECT Objeto.*
-                FROM Inventario
-                INNER JOIN Objeto
-                    ON Inventario.IdObjeto = Objeto.Id
-                WHERE Inventario.IdPartida = @IdPartida";
-
-            return connection.Query<Objeto>(
-                sql,
-                new
-                {
-                    IdPartida = idPartida
-                }
-            ).ToList();
         }
     }
 }

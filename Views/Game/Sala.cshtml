@@ -1,0 +1,61 @@
+@{
+    int idPartida = ViewBag.IdPartida;
+    int sala = ViewBag.Sala;
+    string nombreSala = ViewBag.NombreSala;
+    bool tieneLlave = ViewBag.TieneLlave;
+
+    ViewData["Title"] = nombreSala;
+    ViewData["BodyClass"] = "game-body";
+}
+
+<div id="game" class="vn"
+     data-partida="@idPartida"
+     data-sala="@sala"
+     data-llave="@(tieneLlave ? "1" : "0")">
+
+    <div class="vn-hud">
+        <span class="vn-room">SALA @sala · @nombreSala.ToUpper()</span>
+
+        <div class="vn-inventory" id="vnInventory" aria-label="Inventario">
+            <button type="button" class="vn-item" id="itemLlave" hidden title="Llave · Ward B - Isolation">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="7" cy="12" r="4" /><path d="M11 12h10M17 12v4M20 12v3" /></svg>
+                <span>Llave</span>
+            </button>
+        </div>
+
+        <div class="vn-hud-actions">
+            <button type="button" class="vn-hud-btn" id="btnSonido" title="Sonido">SONIDO: SÍ</button>
+            <a class="vn-hud-btn" href="@Url.Action("Saved", "Game")">SALIR</a>
+        </div>
+    </div>
+
+    <div class="vn-screen" id="vnScreen">
+        <div class="vn-blur" id="vnBlur"></div>
+        <img class="vn-img" id="vnImg" alt="" hidden />
+
+        <div class="vn-black" id="vnBlack" hidden>
+            <div class="vn-black-name" id="vnBlackName"></div>
+            <p class="vn-black-text" id="vnBlackText"></p>
+        </div>
+
+        <div class="vn-toast" id="vnToast" hidden></div>
+    </div>
+
+    <div class="vn-dialog" id="vnDialog">
+        <div class="vn-name" id="vnName" hidden></div>
+        <p class="vn-text" id="vnText"></p>
+        <span class="vn-next" id="vnNext" aria-hidden="true">▼</span>
+    </div>
+
+    <div class="vn-puzzle" id="vnPuzzle" hidden></div>
+    <div class="vn-fade" id="vnFade"></div>
+</div>
+
+<noscript>
+    <p class="page center">Este juego necesita JavaScript activado.</p>
+</noscript>
+
+@section Scripts {
+    <script src="~/js/juego.js" asp-append-version="true"></script>
+    <script src="~/js/historia.js" asp-append-version="true"></script>
+}
